@@ -127,7 +127,7 @@ solve_procrustes_problem <- function(X,Y,p,q) {
   }
   
   
-  I0 <- as.vector(sparseMatrix(i = c(1:dim(G)[1]),j=c(1:dim(G)[1]),x=c(1,-1)))
+  I0 <- as.vector(sparseMatrix(i = c(1:dim(G)[1]),j=c(1:dim(G)[1]),x=1))
   
   
   result <- alabama::auglag(par = I0,fn = f_new,gr = f_grad,heq = heq, heq.jac = heq_jac)

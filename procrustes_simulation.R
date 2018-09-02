@@ -1,11 +1,12 @@
 source("C:/Users/joshu/Documents/Research/procrustes/indefinite_procrustes.R")
 
 library(irlba)
-
+set.seed(123)
 simulateAdjacency <- function(B = B_mat,n = 100) {
   A <- matrix(0,n,n)
-  for (i in c(2:n)) {
-    for (j in c(i:(n-1))) {
+  for (i in c(1:n)) {
+    j <- n
+    while (j > i) {
       if(i < n/2) {
         if (j < n/2) {
           A[i,j] <- rbinom(1,1,B[1,1])
@@ -20,6 +21,7 @@ simulateAdjacency <- function(B = B_mat,n = 100) {
         }
       }
       A[j,i] <- A[i,j]
+      j <- j -1
     }
   }
   
@@ -71,7 +73,7 @@ X_true <- get_true_X(n)
 
 
 
-A_svd <- irlba(A,2)
+A_svd <- svd(A)
 Xhat <- A_svd$u[,c(1:2)] %*% diag(A_svd$d[c(1:2)])^(.5)
 X <- Xhat
 
@@ -86,6 +88,7 @@ library(ggplot2)
 procrustes_plot(Xhat = Xhat,X_true = X2,X_new = X1)
 
 n <- 100
+set.seed(12)
 A1 <- simulateAdjacency(n=n)
 A2 <- simulateAdjacency(n=n)
 A1_svd <- irlba(A1,2)
@@ -97,6 +100,8 @@ X_true <- get_true_X(n)
 
 solution1 <- solve_procrustes_problem(X1,X2,p=1,q=1)
 solution2 <- solve_procrustes_problem(X1,X2,p=2,q=0)
+solution1$convergence
+solution2$convergence
 
 procrustes_plot(Xhat = (X1 %*% convertToMatrix(solution1$par)),
                 X_true= X_true, X_new = X2)
