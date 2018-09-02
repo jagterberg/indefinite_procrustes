@@ -5,6 +5,6 @@ procrustes_simulation_3_block.html
 
 .RData
 .Rhistory
-.png
-.Rmd
-.bib
+*.png
+*.Rmd
+*.bib
